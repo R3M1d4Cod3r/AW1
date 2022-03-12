@@ -1,5 +1,5 @@
 "use strict";
-
+// Ex0
 function reduce_string( arr ){
     
     return arr.map( e => {
@@ -13,4 +13,14 @@ function reduce_string( arr ){
 }
 
 
-console.log(reduce_string(["Ciaoooo"]));
+console.log(reduce_string(["it"]));
+
+// Ex1
+
+function Film(id,title,favorites=false,date,rating){
+    this.id = id;
+    this.title = title;
+    this.favorites = favorites;
+    this.date = date;
+    this.rating = rating;
+}
