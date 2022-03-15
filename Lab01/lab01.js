@@ -38,7 +38,6 @@ function FilmList(){
                 return 1;
             if(b.date==undefined)
                 return -1;
-
             return a.date.diff(b.date);
         });
     this.deleteFilm = (e) => {
