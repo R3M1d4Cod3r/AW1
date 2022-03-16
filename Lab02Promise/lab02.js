@@ -10,7 +10,7 @@ function Film(id,title,favorites=false,date=undefined,rating){
     this.favorites = favorites;
     this.date = (date!=undefined) ? dayjs(date,'YYYY-MM-DD'):undefined;
     this.rating = rating;
-    this.str = () => { return `${this.id} ${this.title} ${this.favorites} ${(this.date!=undefined) ? this.date.format('DD/MM/YYYY'):undefined} ${this.rating}`;};
+    this.str = () => { return `${this.id} ${this.title} ${this.favorites} ${(this.date!=undefined) ? this.date.format('YYYY-MM-DD'):undefined} ${this.rating}`;};
 }
 
 function FilmList(){
@@ -140,13 +140,27 @@ function FilmLibrary(){
         });
     
     }
+    this.Store = (film) => {
+        return new Promise((resolve,reject)=>{
+            let sql="INSERT INTO films (id,title,favorite,watchdate,rating) VALUES(?,?,?,?,?)"
+            db.run(sql,[film.id,film.title,(film.rating)? 1:0 , (film.date != undefined)? film.date.format('YYYY-MM-DD'):undefined ,film.rating],err=>{if(err) reject(err);})
+            resolve("Inserimento Riuscito");
+        });
+    }
+    this.DeleteById = (id) =>{
+        return new Promise((resolve,reject)=>{
+            let sql= "DELETE FROM films WHERE films.id = ?";
+            db.run(sql,[id],(err)=>{if(err) reject(err);});
+            resolve("rimozione esguita");
+        });
+    }
 
 }
 
 let f=new FilmLibrary();
 let flist= new FilmList();
 
-f.getAll()
+/*f.getAll()
 .then((e)=>{flist=e;}).catch(console.log)
 .then( ()=>{flist.forEach(x=>(console.log(x.str())));})
 .then(
@@ -179,3 +193,8 @@ f.getAll()
 
 
     );
+
+    f.Store(new Film(7,"Shrek Terzo",1,"2022-03-16",5))
+    .then(console.log).catch(console.log);*/
+    f.DeleteById(7)
+    .then(console.log).catch(console.log);
