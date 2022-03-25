@@ -76,7 +76,7 @@ function FilmLibrary(){
         return new Promise((resolve,reject)=>{
             let films_result= new  FilmList();
 
-            db.all("SELECT * FROM films WHERE films.favorite == ?",[dayjs().format("YYYY-MM-DD")],(err,rows)=>{
+            db.all("SELECT * FROM films WHERE films.watchdate == ?",[dayjs().format("YYYY-MM-DD")],(err,rows)=>{
                 if(err)
                      reject(err);
                 else
