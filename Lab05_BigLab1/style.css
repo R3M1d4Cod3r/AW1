@@ -4,9 +4,17 @@ button.btn{
 }
 
 #rosso{
+    display:inline-block;
     color: red;
 }
 
 #aside{
     height: 100vh;
+}
+
+#plus{
+    width: auto;
+    color: blue;
+    font-size: 3rem;
+
 }

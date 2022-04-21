@@ -19,8 +19,8 @@
     <!--Dayjs-->
     <script defer src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
 
-    <!--My script-->
-    <script defer src="script.js"></script>
+    <!--My script    <script defer src="script.js"></script>-->
+    
 </head>
 
 <body>
@@ -46,8 +46,8 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <button class="btn btn-primary " type="button"
-                                            style="text-align:left;" id="All">All</button>
+                                        <button class="btn btn-primary " type="button" style="text-align:left;"
+                                            id="All">All</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -73,6 +73,11 @@
                                             Month</button>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-light " type="button" id="Seen Last Month">Unseen</button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -85,8 +90,8 @@
                     <h1>ALL</h1>
                     <table class="table">
                         <tbody id="film-table">
-                            <!--<tr>
-                                <td id="rosso">Pulp Fiction</td>
+                            <tr>
+                                <td ><div><i class="bi bi-pencil-square"></i> <i class="bi bi-trash"></i> <div id="rosso">Pulp Fiction</div></div></td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -103,7 +108,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td id="rosso">21 Grams</td>
+                                <td ><div><i class="bi bi-pencil-square"></i> <i class="bi bi-trash"></i> <div id="rosso">21 Grams</div></div></td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -120,7 +125,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Star Wars</td>
+                                <td ><div><i class="bi bi-pencil-square"></i> <i class="bi bi-trash"></i> <div id="rosso">Star Wars</div></div></td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -137,7 +142,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Matrix</td>
+                                <td ><div><i class="bi bi-pencil-square"></i> <i class="bi bi-trash"></i> <div id="rosso">Matrix</div></div></td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -154,7 +159,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Shrek</td>
+                                <td ><div><i class="bi bi-pencil-square"></i> <i class="bi bi-trash"></i> <div id="rosso">Shrek</div></div></td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -169,14 +174,19 @@
                                     <i class="bi bi-star"></i>
                                     <i class="bi bi-star"></i>
                                 </td>
-                            </tr>-->
                         </tbody>
                     </table>
+
+                    <div class="clearfix" id="plus-button">
+                        <div class="float-end">
+                            <i class="bi bi-plus-circle-fill " id="plus"></i>
+                        </div>
+                    </div>
+
                 </main>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
