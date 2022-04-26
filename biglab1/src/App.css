@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+button.btn{
+  text-align: left; 
+  width: 100%;
+}
+
+#rosso{
+  display:inline-block;
+  color: red;
+}
+
+#aside{
+  height: 100vh;
+}
+
+#plus{
+  width: auto;
+  color: blue;
+  font-size: 3rem;
+
+}
