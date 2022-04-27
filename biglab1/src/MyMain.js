@@ -48,7 +48,6 @@ function MyMain(props) {
             <h1>{name}</h1>
             <table className="table">
                 <tbody id="film-table">
-
                     {
                         result.map((el) => (<tr key={el.id}>
                             <td ><div><BsPencilSquare /><BsTrash /> <div id={el.favorites ? "rosso" : "nero"} >{el.title}</div> </div> </td>
