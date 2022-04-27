@@ -39,6 +39,8 @@ function MyMain(props) {
                 }
             });
             break;
+        case 'Unseen':
+            result = films.list.filter( e => (e.date == undefined ));
 
     }
     return (

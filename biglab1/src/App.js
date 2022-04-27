@@ -10,7 +10,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import MyMain from './MyMain';
 
 function App() {
-  let button_list = ["All", "Favorite", "Best Rated", "Last Seen", "Seen Last Month", "Unseen"];
+  let button_list = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"];
   const [SelButton, setSelButton] = useState("All");
   return (
     <>
