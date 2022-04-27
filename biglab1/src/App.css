@@ -48,6 +48,10 @@ button.btn{
   display:inline-block;
   color: red;
 }
+#nero{
+  display:inline-block;
+  color: black;
+}
 
 #aside{
   height: 100vh;

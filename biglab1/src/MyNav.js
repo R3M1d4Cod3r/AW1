@@ -5,7 +5,7 @@ function MyNav() {
     return (
         <Navbar className='navbar-dark bg-primary'>
             <Container fluid>
-                <Navbar.Brand ><BsFilm />FilmLibrary</Navbar.Brand>
+                <Navbar.Brand ><BsFilm /> FilmLibrary</Navbar.Brand>
                 <Form className="d-flex" >
                     <FormControl
                         type="search"
