@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Form, Alert, Row, Col, Container } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import StarRating from './StarRating.js';
+import { useNavigate } from 'react-router-dom';
 
 function AddFilmForm(props) {
     const [name, setName] = useState('');
@@ -9,6 +10,9 @@ function AddFilmForm(props) {
     const [date, setDate] = useState(dayjs());
     const [score, setScore] = useState(0);
     const [errorMsg, setErrorMsg] = useState('');
+    const navigate= useNavigate();
+    const setFilms=props.setFilms;
+ 
     const handleScore = (event) => {
         const val = event.target.value;
         setScore(val);
@@ -21,8 +25,9 @@ function AddFilmForm(props) {
         if (score >= 0 && score <= 5 && name !== '') {
             // add
             const newFilm = { nome: name, favorite: favorite, date: date, score: score }
-            props.setFilms(oldFilms => [...oldFilms, newFilm]);
-            props.cancel();
+            setFilms(oldFilms => [...oldFilms, newFilm]);
+            navigate('/')
+
         }
         else if (score < 0 || score > 5) {
             setErrorMsg('Errore voto: ' + score);
@@ -34,7 +39,7 @@ function AddFilmForm(props) {
         }
     }
 
-    return (<>
+    return (<Row><Col><br />
         {errorMsg ? <Alert variant='danger' onClose={() => setErrorMsg('')} dismissible>{errorMsg}</Alert> : false}
 
         <Form>
@@ -58,10 +63,10 @@ function AddFilmForm(props) {
 
             <Form.Label> </Form.Label>
         </Form>
-        <Container fluid ><Row ><Col md="3"><Button onClick={handleSubmit} >Save</Button></Col></Row><br />
+        <Container fluid ><Row ><Col md={9}></Col><Col md="1" xs='3'><Button variant="primary" onClick={handleSubmit} >Save</Button></Col></Row><br />
 
-            <Row><Col md="3" ><Button onClick={props.cancel}>Cancel</Button></Col></Row></Container>
-    </>);
+            <Row><Col md={9}></Col><Col md="1" xs='3' ><Button variant="danger" onClick={()=>navigate('/')}>Cancel</Button></Col></Row></Container>
+    </Col></Row>);
 
 }
 

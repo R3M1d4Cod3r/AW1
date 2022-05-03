@@ -3,12 +3,13 @@ import { Row, Col, Container } from 'react-bootstrap';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import StarRating from './StarRating.js';
-import AddFilmForm from './AddFilmForm.js';
+import { useNavigate } from 'react-router-dom';
 
 function MyMain(props) {
     const name = props.name;
-    const [films, setFilms] = useState(props.films);
-    const [showForm, setShowForm] = useState(false);
+    const films = props.films;
+    const setFilms = props.setFilms;
+    const navigate = useNavigate();
 
     function deleteExam(nome) {
         setFilms(films.filter((e) => e.nome !== nome));
@@ -60,8 +61,7 @@ function MyMain(props) {
                             <tr key={el.nome} >
                                 <td >
                                     <BsPencilSquare></BsPencilSquare>
-                                    <input type="radio" name="delete"
-                                    />
+                                    
                                     <BsTrash
                                         className="trash"
                                         onClick={() => deleteExam(el.nome)} />
@@ -87,14 +87,8 @@ function MyMain(props) {
                         ))}
                 </tbody>
             </table>
-            {(!showForm) ?
-                <Container fluid ><Row><Col className='text-end'><BsFillPlusCircleFill color='#0d6efd' fontSize="2rem" onClick={() => setShowForm(true)} /></Col></Row></Container>
-                :
-                <AddFilmForm films={films} setFilms={setFilms} cancel={() => setShowForm(false)} />
-
-            }
-
-
+           
+                <Container fluid ><Row><Col className='text-end'><input type="radio" name="add"/><BsFillPlusCircleFill id="click" color='#0d6efd' fontSize="2rem" className="plus-add" onClick={() => navigate('/add')} /></Col></Row></Container>
         </>
     );
 }

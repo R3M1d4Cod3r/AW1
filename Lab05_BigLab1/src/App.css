@@ -64,7 +64,9 @@ button.btn{
   display:inline-block;
   color: black;
 }
-
+#click{
+  cursor: pointer;
+}
 
 #aside{
   height: 100vh;
