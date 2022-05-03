@@ -10,9 +10,9 @@ function StarRating(props) {
     const Film = props.Films;
     const setFilm = props.setFilms;
     const setStar = props.setStar;
- 
+
     function changeScore(star_n) {
-        //Controllo se la prima stella viene chliccata due volta setta il rating a zero
+        //Controlla se la prima stella viene chliccata due volte setta il rating a zero
         let value;
         if (star_n === 1) {
             if (firstPressed) {
@@ -24,7 +24,6 @@ function StarRating(props) {
         } else {
             value = star_n;
         }
-
         setRating(value);
         //Controllo se viene passato una lista film allora star rating serve per modificare la lista dei film altrimenti serve per la creazione di un nuovo film
         if (Film) {
