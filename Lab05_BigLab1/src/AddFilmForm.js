@@ -52,7 +52,7 @@ function AddFilmForm(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Score:</Form.Label>
-                <StarRating star={score} setStar={setScore} nome={name} setFilms={props.setFilms} />
+                <StarRating star={score} setStar={setScore} />
             </Form.Group>
 
 
