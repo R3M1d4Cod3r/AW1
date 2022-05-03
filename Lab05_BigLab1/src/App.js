@@ -1,12 +1,12 @@
 import './App.css';
 import MyNav from "./MyNav.js";
-import MyAside from './MyAside';
+import MyAside from './MyAside.js';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from 'react-bootstrap';
-import MyMain from './MyMain';
+import MyMain from './MyMain.js';
 
 
 let fakeFilms = [
