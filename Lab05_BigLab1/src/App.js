@@ -9,31 +9,33 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import MyMain from './MyMain.js';
 import AddFilmForm from './AddFilmForm';
+import EditFilmForm from './EditFilmForm';
 
 
 let fakeFilms = [
   { nome: 'Pulp Fiction', favorite: true, score: 5, date: dayjs('2022-03-20') },
   { nome: '21 Grams', favorite: true, score: 4, date: dayjs('2022-03-11') },
-  { nome: 'Star Wars', favorite: false, score: 0, date: '' },
-  { nome: 'Matrix', favorite: false, score: 0, date: '' },
+  { nome: 'Star Wars', favorite: false, score: 0, date: undefined },
+  { nome: 'Matrix', favorite: false, score: 0, date: undefined },
   { nome: 'Shrek', favorite: false, score: 3, date: dayjs('2022-03-21') }
 
 ];
 
 function App() {
   const [Films, setFilms] = useState(fakeFilms);
-  
+
   return (
-  
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<LandingPage films={Films} setFilms={setFilms}/>}/>
-            <Route path='/add' element={<AddFilmForm setFilms={setFilms}/>}/>
-          </Route>
-        </Routes>
-      </Router>
-  
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<LandingPage films={Films} setFilms={setFilms} />} />
+          <Route path='/add' element={<AddFilmForm setFilms={setFilms} />} />
+          <Route path='/edit/:FilmName' element={<EditFilmForm films={Films} setFilms={setFilms}/>} />
+        </Route>
+      </Routes>
+    </Router>
+
   );
 }
 
@@ -60,7 +62,7 @@ function LandingPage(props) {
       </Col>
       <Col md={9}>
         <br />
-        <MyMain name={SelButton} films={props.films} setFilms={props.setFilms}/>
+        <MyMain name={SelButton} films={props.films} setFilms={props.setFilms} />
       </Col>
     </Row>
   )

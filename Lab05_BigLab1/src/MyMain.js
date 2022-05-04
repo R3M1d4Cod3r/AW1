@@ -60,7 +60,7 @@ function MyMain(props) {
                         result.map((el) => (
                             <tr key={el.nome} >
                                 <td >
-                                    <BsPencilSquare></BsPencilSquare>
+                                    <BsPencilSquare id="click" onClick={()=> navigate('/edit/'+el.nome)}></BsPencilSquare>
                                     
                                     <BsTrash
                                         className="trash"

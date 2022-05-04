@@ -2,31 +2,42 @@ import { useState } from 'react';
 import { Button, Form, Alert, Row, Col, Container } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import StarRating from './StarRating.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 //Compnente che si occupa dell'aggiunta di un film alla lista
-function AddFilmForm(props) {
-    const [name, setName] = useState('');
-    const [favorite, setFavorite] = useState(false);
-    const [date, setDate] = useState(dayjs());
-    const [score, setScore] = useState(0);
-    const [errorMsg, setErrorMsg] = useState('');
-    const navigate= useNavigate();
-    const setFilms=props.setFilms;
- 
-    const handleScore = (event) => {
-        const val = event.target.value;
-        setScore(val);
+function EditFilmForm(props) {
+    const navigate = useNavigate();
+    const { FilmName } = useParams();
 
-    }
+    const films = props.films;
+    const setFilms = props.setFilms;
+
+    const FilmToEdit = films.find((f) => f.nome === FilmName);
+
+
+
+    const [name, setName] = useState(FilmToEdit.nome);
+    const [favorite, setFavorite] = useState(FilmToEdit.favorite);
+    const [date, setDate] = useState(FilmToEdit.date ? FilmToEdit.date : dayjs());
+    const [score, setScore] = useState(FilmToEdit.score);
+    const [errorMsg, setErrorMsg] = useState('');
+
+
     const handleSubmit = (event) => {
         event.preventDefault();
         // validation
 
         if (score >= 0 && score <= 5 && name !== '') {
             // add
-            const newFilm = { nome: name, favorite: favorite, date: date, score: score }
-            setFilms(oldFilms => [...oldFilms, newFilm]);
+            const newFilm = { nome: name, favorite: favorite, date: date, score: score };
+            //setFilms(films.filter((f) => (f !== FilmToEdit.nome)));
+            //setFilms(() => [...films, newFilm]);
+            setFilms(()=> films.map( f => {
+                if(f.nome===FilmToEdit.nome){
+                    return newFilm
+                }
+                return f;
+            }));
             navigate('/')
 
         }
@@ -45,12 +56,12 @@ function AddFilmForm(props) {
 
         <Form>
             <Form.Group>
-                <Form.Label>Name:</Form.Label>
+                <Form.Label><h1>Name: {FilmToEdit.nome} </h1></Form.Label>
                 <Form.Control value={name} onChange={ev => setName(ev.target.value)}></Form.Control>
             </Form.Group>
             <Form.Label>Favorite:</Form.Label>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" value={favorite} onChange={ev => setFavorite(ev.target.value)} />
+                <Form.Check type="checkbox" value={favorite} onChange={ev => setFavorite(ev.target.value)} checked={favorite ? true : false} />
             </Form.Group>
             <Form.Group>
                 <Form.Label>Date:</Form.Label>
@@ -66,10 +77,10 @@ function AddFilmForm(props) {
         </Form>
         <Container fluid ><Row ><Col md={9}></Col><Col md="1" xs='3'><Button variant="primary" onClick={handleSubmit} >Save</Button></Col></Row><br />
 
-            <Row><Col md={9}></Col><Col md="1" xs='3' ><Button variant="danger" onClick={()=>navigate('/')}>Cancel</Button></Col></Row></Container>
+            <Row><Col md={9}></Col><Col md="1" xs='3' ><Button variant="danger" onClick={() => navigate('/')}>Cancel</Button></Col></Row></Container>
     </Col></Row>);
 
 }
 
 
-export default AddFilmForm;
+export default EditFilmForm;
