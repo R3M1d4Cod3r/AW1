@@ -46,7 +46,7 @@ function MyMain(props) {
             });
             break;
         case 'Unseen':
-            result = films.filter((e) => (e.date === ''));
+            result = films.filter((e) => (e.date === undefined));
             break;
         default:
             result = films;

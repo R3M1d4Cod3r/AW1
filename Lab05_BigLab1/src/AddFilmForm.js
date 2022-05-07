@@ -23,7 +23,7 @@ function AddFilmForm(props) {
         event.preventDefault();
         // validation
 
-        if (score >= 0 && score <= 5 && name !== '') {
+        if (score >= 0 && score <= 5 && name !== '' &&  !date.isAfter(dayjs())) {
             // add
             const newFilm = { nome: name, favorite: favorite, date: date, score: score }
             setFilms(oldFilms => [...oldFilms, newFilm]);
@@ -37,6 +37,9 @@ function AddFilmForm(props) {
         else if (name === '') {
             setErrorMsg('Errore campo nome vuoto');
 
+        }
+        else if(date.isAfter(dayjs())){
+            setErrorMsg('Errore la data di visione non può essere futura');
         }
     }
 
