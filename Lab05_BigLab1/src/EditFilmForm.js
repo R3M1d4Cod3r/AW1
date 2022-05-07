@@ -23,10 +23,11 @@ function EditFilmForm(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
 
+
     const handleSubmit = (event) => {
         event.preventDefault();
         // validation
-
+        
         if (score >= 0 && score <= 5 && name !== '' &&  !date.isAfter(dayjs())) {
             // add
             const newFilm = { nome: name, favorite: favorite, date: date, score: score };
@@ -64,7 +65,7 @@ function EditFilmForm(props) {
             </Form.Group>
             <Form.Label>Favorite:</Form.Label>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" value={favorite} onChange={ev => setFavorite(ev.target.value)} checked={favorite ? true : false} />
+                <Form.Check type="checkbox" value={favorite} onChange={ev => {setFavorite(!favorite)}} checked={favorite ? true : false} />
             </Form.Group>
             <Form.Group>
                 <Form.Label>Date:</Form.Label>

@@ -13,7 +13,7 @@ function AddFilmForm(props) {
     const [errorMsg, setErrorMsg] = useState('');
     const navigate= useNavigate();
     const setFilms=props.setFilms;
- 
+
     const handleScore = (event) => {
         const val = event.target.value;
         setScore(val);
@@ -53,7 +53,7 @@ function AddFilmForm(props) {
             </Form.Group>
             <Form.Label>Favorite:</Form.Label>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" value={favorite} onChange={ev => setFavorite(ev.target.value)} />
+                <Form.Check type="checkbox" value={favorite} onChange={ev => {setFavorite(ev.target.value)}} />
             </Form.Group>
             <Form.Group>
                 <Form.Label>Date:</Form.Label>
