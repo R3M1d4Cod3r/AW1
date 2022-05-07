@@ -25,7 +25,8 @@ function AddFilmForm(props) {
 
         if (score >= 0 && score <= 5 && name !== '' &&  !date.isAfter(dayjs())) {
             // add
-            const newFilm = { nome: name, favorite: favorite, date: date, score: score }
+            
+            const newFilm = { nome: name, favorite: favorite, date: date.isValid() ? date : '' , score: score }
             setFilms(oldFilms => [...oldFilms, newFilm]);
             navigate('/')
 

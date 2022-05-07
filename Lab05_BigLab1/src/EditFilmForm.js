@@ -30,7 +30,7 @@ function EditFilmForm(props) {
         
         if (score >= 0 && score <= 5 && name !== '' &&  !date.isAfter(dayjs())) {
             // add
-            const newFilm = { nome: name, favorite: favorite, date: date, score: score };
+            const newFilm = { nome: name, favorite: favorite, date: date.isValid() ? date : '' , score: score };
             //setFilms(films.filter((f) => (f !== FilmToEdit.nome)));
             //setFilms(() => [...films, newFilm]);
             setFilms(()=> films.map( f => {
