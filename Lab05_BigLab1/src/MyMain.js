@@ -37,7 +37,7 @@ function MyMain(props) {
             break;
         case 'Seen Last Month':
             result = films.filter(e => {
-                if (e.date !== '') {
+                if (e.date !== undefined) {
                     return e.date.isAfter(dayjs().subtract(1, "month"));
                 }
                 else {
