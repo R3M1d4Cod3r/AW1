@@ -6,7 +6,7 @@ import StarRating from './StarRating.js';
 import { useNavigate } from 'react-router-dom';
 
 function MyMain(props) {
-    const name = props.name;
+    let name = props.filter;
     const films = props.films;
     const setFilms = props.setFilms;
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ function MyMain(props) {
             });
             break;
         case 'Unseen':
-            result = films.filter((e) => (e.date === ''));
+            result = films.filter((e) => (e.date === undefined));
             break;
         default:
             result = films;

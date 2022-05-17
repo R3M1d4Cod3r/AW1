@@ -23,13 +23,14 @@ function EditFilmForm(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
 
+
     const handleSubmit = (event) => {
         event.preventDefault();
         // validation
-
-        if (score >= 0 && score <= 5 && name !== '') {
+        
+        if (score >= 0 && score <= 5 && name !== '' &&  !date.isAfter(dayjs())) {
             // add
-            const newFilm = { nome: name, favorite: favorite, date: date, score: score };
+            const newFilm = { nome: name, favorite: favorite, date: date.isValid() ? date : '' , score: score };
             //setFilms(films.filter((f) => (f !== FilmToEdit.nome)));
             //setFilms(() => [...films, newFilm]);
             setFilms(()=> films.map( f => {
@@ -49,6 +50,9 @@ function EditFilmForm(props) {
             setErrorMsg('Errore campo nome vuoto');
 
         }
+        else if(date.isAfter(dayjs())){
+            setErrorMsg('Errore la data di visione non può essere futura');
+        }
     }
 
     return (<Row><Col><br />
@@ -61,7 +65,7 @@ function EditFilmForm(props) {
             </Form.Group>
             <Form.Label>Favorite:</Form.Label>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" value={favorite} onChange={ev => setFavorite(ev.target.value)} checked={favorite ? true : false} />
+                <Form.Check type="checkbox" value={favorite} onChange={ev => {setFavorite(!favorite)}} checked={favorite ? true : false} />
             </Form.Group>
             <Form.Group>
                 <Form.Label>Date:</Form.Label>
