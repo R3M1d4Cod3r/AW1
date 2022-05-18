@@ -4,7 +4,7 @@ import { BsFillStarFill } from 'react-icons/bs';
 function StarRating(props) {
 
     const [rating, setRating] = useState(props.star);
-    const [stars_list] = useState([1, 2, 3, 4, 5]);
+    const [stars_list] = useState([1, 2, 3, 4, 5]);//le stelle sono salvate in uno stato
     const [firstPressed, setFirstPressed] = useState(false);
 
     const Film = props.Films;

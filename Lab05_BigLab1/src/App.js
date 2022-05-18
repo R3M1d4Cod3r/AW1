@@ -41,7 +41,7 @@ function App() {
   );
 }
 
-function Layout() {
+function Layout() {//Layout generale delle pagine
   return (
     <>
       <MyNav />
@@ -54,9 +54,9 @@ function Layout() {
 }
 
 function LandingPage(props) {
-  let button_list = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"];
-  const [SelButton, setSelButton] = useState("All");
-  const { Filter } = useParams();
+  let button_list = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"]; 
+  const [SelButton, setSelButton] = useState("All"); //Stato dei bottoni
+  const { Filter } = useParams(); //Filtro passato come parametro nell'indirizzo
   let filtername = Filter? Filter : 'All';
   return (
     <Row>
