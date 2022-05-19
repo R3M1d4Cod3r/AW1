@@ -115,7 +115,6 @@ exports.Update = async (film) => {
 }
 
 exports.markFavorite = async (film) => {
-    console.log(film);
     return new Promise((resolve, reject) => {
         let sql = "UPDATE films SET  favorite = ?  WHERE  id = ? ; ";
         db.run(sql, [ film.favorite , film.id], err => { if (err) reject(err); });
