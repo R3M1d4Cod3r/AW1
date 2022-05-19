@@ -1,0 +1,47 @@
+GET http://localhost:3001/filter/All
+###
+GET http://localhost:3001/filter/Favorite
+###
+GET http://localhost:3001/filter/Best Rated
+###
+GET http://localhost:3001/filter/Seen Last Month
+###
+GET http://localhost:3001/filter/Unseen
+###
+GET http://localhost:3001/film/1
+###
+POST http://localhost:3001/add HTTP/1.1
+content-type: application/json
+
+{
+    "title": "sample",
+    "favorite": "true",
+    "watchdate" : "null",
+    "rating" : "3"
+}
+###
+PUT  http://localhost:3001/edit HTTP/1.1
+content-type: application/json
+
+{
+    "id": 8,
+    "title": "sampleeeeeeeeeee",
+    "favorite": false,
+    "watchdate" : "null",
+    "rating" : "5"
+}
+###
+PUT http://localhost:3001/mark HTTP/1.1
+content-type: application/json
+
+{
+    "id": 8,
+    "favorite": true
+}
+###
+DELETE http://localhost:3001/delete HTTP/1.1
+content-type: application/json
+
+{
+    "id": 7
+}

@@ -2,159 +2,138 @@
 
 const dayjs = require('dayjs');
 const sqlite = require("sqlite3");
-const db = new sqlite.Database("films.db",(err)=>{if(err) throw err;});
+const db = new sqlite.Database("film.db", (err) => { if (err) throw err; });
 
-function Film(id,title,favorites=false,date=undefined,rating){
-    this.id = id;
-    this.title = title;
-    this.favorites = favorites;
-    this.date = (date!=undefined) ? dayjs(date,'YYYY-MM-DD'):undefined;
-    this.rating = rating;
-    this.str = () => { return `${this.id} ${this.title} ${this.favorites} ${(this.date!=undefined) ? this.date.format('YYYY-MM-DD'):undefined} ${this.rating}`;};
+
+exports.getAll = () => {
+    return new Promise((resolve, reject) => {
+        let result = [];
+        db.all("SELECT * FROM films", (err, rows) => {
+            if (err)
+                reject(err);
+
+            rows.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            result = rows;
+            resolve(result);
+        });
+    });
+}
+exports.Allfavorite = () => {
+    return new Promise((resolve, reject) => {
+        let result = [];
+        db.all("SELECT * FROM films WHERE films.favorite != FALSE", (err, rows) => {
+            if (err)
+                reject(err);
+
+            result = rows;
+            result.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            resolve(result);
+        });
+    });
 }
 
-function FilmList(){
-    this.list =  [];
-    this.addNewFilm = (e) => {
-        this.list.push(e);
-    },
-    this.sortByDate = () => {
-        return this.list.sort( (a,b)=>{
-            if(a.date==undefined)
-                return 1;
-            if(b.date==undefined)
-                return -1;
-            return a.date.diff(b.date);
-        });
-    
-    };
+exports.SeenLastMonth = () => {
 
-    this.deleteFilm = (id) => {
-        this.list=this.list.filter((e) => (e.id != id));
-    };
-    this.resetWatchedFilms = () => {
-        this.list.map( (e)=>(e.date=undefined));
-    };
-    this.getRated=()=>{
-        return this.list.filter((e)=>(e.rating!=undefined)).sort((a,b)=>{
-            return b.rating-a.rating;
+    return new Promise((resolve, reject) => {
+        let result = [];
+
+        db.all("SELECT * FROM films ", (err, rows) => {
+            if (err)
+                reject(err);
+
+            result = rows.filter(row => dayjs(row.watchdate, 'YYYY-MM-DD').isAfter(dayjs().subtract(1, "month")) && dayjs(row.watchdate, 'YYYY-MM-DD').isBefore(dayjs()));
+            result.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            resolve(result);
         });
-    };
+    });
 }
+exports.Unseen = () => {
 
-function FilmLibrary(){
-    this.getAll =  () => {
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-            db.all("SELECT * FROM films",(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                    films_result.addNewFilm(new Film(row.id,row.title,(row.favorite != 0 ) ? true : false,row.watchdate,row.rating));
-                });
-                resolve(films_result.list);
-            });
+    return new Promise((resolve, reject) => {
+        let result = [];
+        db.all("SELECT * FROM films WHERE films.watchdate IS NULL", (err, rows) => {
+            if (err)
+                reject(err);
+            result = rows;
+            result.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            resolve(result);
         });
-    }
-    this.Allfavorite = () => {
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-            db.all("SELECT * FROM films WHERE films.favorite != FALSE",(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                    films_result.addNewFilm(new Film(row.id,row.title,(row.favorite !=0 ) ? true : false,row.watchdate,row.rating));
-                });
+    });
+}
+exports.RatingGraterThan = (r) => {
+    return new Promise((resolve, reject) => {
+        let result = [];
 
-                resolve(films_result.list);
-            });
+        db.all("SELECT * FROM films WHERE films.rating >= ?", [r], (err, rows) => {
+            if (err)
+                reject(err);
+            result = rows;
+            result.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            resolve(result);
         });
-    }
-    this.AllWatchedToday = () => {
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-
-            db.all("SELECT * FROM films WHERE films.watchdate == ?",[dayjs().format("YYYY-MM-DD")],(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                    films_result.addNewFilm(new Film(row.id,row.title,(row.favorite !=0 ) ? true : false,row.watchdate,row.rating));
-                });
-
-                resolve(films_result.list);
-            });
-        });
-    }
-    this.WathcedBefore = (date) =>{
-        let d = dayjs(date,'YYYY-MM-DD');
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-
-            db.all("SELECT * FROM films ",(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                    if(dayjs(row.watchdate,'YYYY-MM-DD').isBefore(d))
-                        films_result.addNewFilm(new Film(row.id,row.title,(row.favorite !=0 ) ? true : false,row.watchdate,row.rating));
-                });
-
-                resolve(films_result.list);
-            });
-        });
-    }
-    this.RatingGraterThan = (r) => {
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-
-            db.all("SELECT * FROM films WHERE films.rating >= ?",[r],(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                        films_result.addNewFilm(new Film(row.id,row.title,(row.favorite !=0 ) ? true : false,row.watchdate,row.rating));
-                });
-
-                resolve(films_result.list);
-            });
-        });
-    
-    }
-    this.getFilmByTitle = (title) => {
-        return new Promise((resolve,reject)=>{
-            let films_result= new  FilmList();
-
-            db.all("SELECT * FROM films WHERE films.title == ?",[title],(err,rows)=>{
-                if(err)
-                     reject(err);
-                else
-                rows.forEach((row)=>{
-                        films_result.addNewFilm(new Film(row.id,row.title,(row.favorite !=0 ) ? true : false,row.watchdate,row.rating));
-                });
-
-                resolve(films_result.list);
-            });
-        });
-    
-    }
-    this.Store = (film) => {
-        return new Promise((resolve,reject)=>{
-            let sql="INSERT INTO films (id,title,favorite,watchdate,rating) VALUES(?,?,?,?,?)"
-            db.run(sql,[film.id,film.title,(film.rating)? 1:0 , (film.date != undefined)? film.date.format('YYYY-MM-DD'):undefined ,film.rating],err=>{if(err) reject(err);})
-            resolve("Inserimento Riuscito");
-        });
-    }
-    this.DeleteById = (id) =>{
-        return new Promise((resolve,reject)=>{
-            let sql= "DELETE FROM films WHERE films.id = ?";
-            db.run(sql,[id],(err)=>{if(err) reject(err);});
-            resolve("rimozione esguita");
-        });
-    }
+    });
 
 }
+exports.getFilmById = (id) => {
+    return new Promise((resolve, reject) => {
+        let result = [];
+        db.all("SELECT * FROM films WHERE films.id == ?", [id], (err, rows) => {
+            if (err)
+                reject(err);
+            result = rows;
+            result.forEach(row => (row.favorite = (row.favorite == 1) ? true : false));
+            resolve(result);
+        });
+    });
+}
+exports.Store = async (film) => {
+
+    let total = await new Promise((resolve, reject) => { //Count all films in the db
+        db.all("SELECT COUNT(*) AS total FROM films", (err, rows) => {
+            if (err)
+                reject(err);
+            rows.forEach((row) => {
+                resolve(row.total);
+            });
+        });
+    });
+
+    return new Promise((resolve, reject) => {
+        let sql = "INSERT INTO films (id,title,favorite,watchdate,rating) VALUES(?,?,?,?,?)"
+        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.date != undefined) ? film.date.format('YYYY-MM-DD') : undefined, film.rating], err => { if (err) reject(err); });
+        film.id = total + 1;
+        resolve(film);
+    })
+}
+
+exports.Update = async (film) => {
+    return new Promise((resolve, reject) => {
+        let sql = "UPDATE films SET title = ? , favorite = ? , watchdate = ? , rating = ? WHERE  id = ? ; ";
+        db.run(sql, [film.title, (film.favorite) ? 1 : 0, (film.date != undefined) ? film.date.format('YYYY-MM-DD') : undefined, film.rating, film.id], err => { if (err) reject(err); });
+        resolve(film);
+    })
+}
+
+exports.markFavorite = async (film) => {
+    console.log(film);
+    return new Promise((resolve, reject) => {
+        let sql = "UPDATE films SET  favorite = ?  WHERE  id = ? ; ";
+        db.run(sql, [ film.favorite , film.id], err => { if (err) reject(err); });
+        resolve(film);
+    })
+}
+
+
+exports.DeleteById = (id) => {
+    return new Promise((resolve, reject) => {
+        let sql = "DELETE FROM films WHERE films.id = ?";
+        db.run(sql, [id], (err) => { if (err) reject(err); });
+        resolve("ok");
+    });
+}
+
+
+
+
 
 
