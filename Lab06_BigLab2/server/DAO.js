@@ -100,7 +100,7 @@ exports.Store = async (film) => {
 
     return new Promise((resolve, reject) => {
         let sql = "INSERT INTO films (id,title,favorite,watchdate,rating) VALUES(?,?,?,?,?)"
-        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.date != undefined) ? film.date.format('YYYY-MM-DD') : undefined, film.rating], err => { if (err) reject(err); });
+        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.watchdate != null) ? film.watchdate : undefined, film.rating], err => { if (err) reject(err); });
         film.id = total + 1;
         resolve(film);
     })
@@ -109,7 +109,7 @@ exports.Store = async (film) => {
 exports.Update = async (film) => {
     return new Promise((resolve, reject) => {
         let sql = "UPDATE films SET title = ? , favorite = ? , watchdate = ? , rating = ? WHERE  id = ? ; ";
-        db.run(sql, [film.title, (film.favorite) ? 1 : 0, (film.date != undefined) ? film.date.format('YYYY-MM-DD') : undefined, film.rating, film.id], err => { if (err) reject(err); });
+        db.run(sql, [film.title, (film.favorite) ? 1 : 0, (film.watchdate != undefined) ? film.watchdate : undefined, film.rating, film.id], err => { if (err) reject(err); });
         resolve(film);
     })
 }
