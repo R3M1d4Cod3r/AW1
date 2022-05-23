@@ -31,19 +31,19 @@ const CHECKALL = () => {
 app.get('/filter/:filter_name', (req, res) => {
     let f;
     switch (req.params.filter_name) {
-        case 'All':
+        case 'all':
             f = () => dao.getAll();
             break;
-        case 'Favorite':
+        case 'favorite':
             f = () => dao.Allfavorite();
             break;
-        case 'Best Rated':
+        case 'best rated':
             f = () => dao.RatingGraterThan(5);
             break;
-        case 'Seen Last Month':
+        case 'seen last month':
             f = () => dao.SeenLastMonth()
             break;
-        case 'Unseen':
+        case 'unseen':
             f = () => dao.Unseen();
             break;
         default:

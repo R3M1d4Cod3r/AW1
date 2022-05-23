@@ -1,11 +1,13 @@
 import { Navbar, Container, Form, FormControl, } from 'react-bootstrap'
 import { BsFilm, BsPersonCircle } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 function MyNav() {
+    const navigate =useNavigate();
     return (
         <Navbar className='navbar-dark bg-primary'>
             <Container fluid>
-                <Navbar.Brand ><BsFilm /> FilmLibrary</Navbar.Brand>
+                <Navbar.Brand id="click" onClick={()=>navigate('/')}><BsFilm /> FilmLibrary</Navbar.Brand>
                 <Form className="d-flex" >
                     <FormControl
                         type="search"
@@ -14,7 +16,7 @@ function MyNav() {
                         aria-label="Search"
                     />
                 </Form>
-                <Navbar.Brand href="#"><BsPersonCircle /></Navbar.Brand>
+                <Navbar.Brand ><BsPersonCircle /></Navbar.Brand>
             </Container>
         </Navbar>
     );

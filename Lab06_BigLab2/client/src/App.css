@@ -12,6 +12,18 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+input[type="radio"]
+{
+  display: none;
+}
+.star{
+  cursor: pointer;
+  transition: color 200ms;
+}
+.trash{
+  cursor: pointer;
+  transition: color 200ms;
+}
 
 .App-header {
   background-color: #282c34;
@@ -51,6 +63,9 @@ button.btn{
 #nero{
   display:inline-block;
   color: black;
+}
+#click{
+  cursor: pointer;
 }
 
 #aside{
