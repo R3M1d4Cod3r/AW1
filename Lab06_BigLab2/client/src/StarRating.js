@@ -31,7 +31,7 @@ function StarRating(props) {
         if (Film) {
             setFilm(Film.map((e) => {
                 if (e.nome === props.nome) {
-                    return { nome: e.nome, favorite: e.favorite, score: value, date: e.date };
+                    return { id:e.id,nome: e.nome, favorite: e.favorite, score: value, date: e.date };
                 }
                 return e;
             }));
