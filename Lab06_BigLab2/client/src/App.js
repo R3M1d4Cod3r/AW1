@@ -15,19 +15,25 @@ import API from './API';
 
 function App() {
   const [Films, setFilms] = useState([]);//Stato con tutti i film
+  function addfilm(newFilm){
+    console.log(newFilm);
+    API.createFilm(newFilm).then( () => console.log("okay")).catch(e => console.log(e));
+    //setFilms( Films=> [...Films, newFilm]);
+    console.log(Films);
+  }
   return (
-    <React.StrictMode>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<LandingPage films={Films} setFilms={setFilms} />} />
-            <Route path="/:Filter" element={<LandingPage films={Films} setFilms={setFilms} />} />
-            <Route path='/add' element={<AddFilmForm setFilms={setFilms} />} />
-            <Route path='/edit/:FilmName' element={<EditFilmForm films={Films} setFilms={setFilms} />} />
-          </Route>
-        </Routes>
-      </Router>
-    </React.StrictMode>
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<LandingPage films={Films} setFilms={setFilms} />} />
+          <Route path="/:Filter" element={<LandingPage films={Films} setFilms={setFilms} />} />
+          <Route path='/add' element={<AddFilmForm setFilms={addfilm} />} />
+          <Route path='/edit/:FilmName' element={<EditFilmForm films={Films} setFilms={setFilms} />} />
+        </Route>
+      </Routes>
+    </Router>
+
 
   );
 }
@@ -46,27 +52,40 @@ function Layout() {//Layout generale per tutte le pagine
 
 function LandingPage(props) {
   let button_list = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"];
-  const [SelButton, setSelButton] = useState("All"); //Stato dei bottoni laterali
   const { Filter } = useParams(); //Parametro per impostare i filtri da url
+  const [SelButton, setSelButton] = useState(Filter ? Filter : "All"); //Stato dei bottoni laterali
   let filtername = Filter ? Filter : 'All';
+  const [dirty, setDirty] = useState(true);
 
   useEffect(() => {
-    API.getFilms(filtername).then(films => { props.setFilms(films); console.log(films); }).catch(e => console.log(e));
 
-  }, [SelButton]);
+    if (dirty && filtername ) {
+      setTimeout(() => { API.getFilms(filtername).then(films => { props.setFilms(films); }).catch(e => console.log(e)); setDirty(false); }, 1000);
+    }
+  }, [dirty, SelButton]);
+
+  function wrap(b) {
+    setSelButton(b);
+    setDirty(true);
+  }
 
   return (
-    <Row>
-      <Col className="bg-light" md={3} id="aside">
-        <br />
-        <MyAside bottoni={button_list} SelButton={SelButton} setSelButton={setSelButton} filter={Filter} />
-      </Col>
-      <Col md={9}>
-        <br />
-        <MyMain name={SelButton} films={props.films} setFilms={props.setFilms} filter={filtername} />
-      </Col>
-    </Row>
+    dirty ? <h1> Loading...</h1> :
+      <Row>
+        <Col className="bg-light" md={3} id="aside">
+          <br />
+          <MyAside bottoni={button_list} SelButton={SelButton} setSelButton={wrap} filter={Filter} />
+        </Col>
+        <Col md={9}>
+          <br />
+          <MyMain name={SelButton} films={props.films} setFilms={props.setFilms} filter={filtername} />
+        </Col>
+      </Row>
+
   )
 }
+
+
+
 
 export default App;

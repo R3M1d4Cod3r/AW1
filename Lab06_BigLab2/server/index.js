@@ -86,10 +86,10 @@ app.put('/edit', CHECKALL(), (req, res) => {
     }
     const film = {//title,favorite,watchdate,rating
         id: req.body.id,
-        title: req.body.title,
+        title: req.body.nome,
         favorite: req.body.favorite,
-        watchdate: req.body.watchdate,
-        rating: req.body.rating,
+        watchdate: req.body.date,
+        rating: req.body.score,
     };
     dao.Update(film)
         .then(film => res.json(film))

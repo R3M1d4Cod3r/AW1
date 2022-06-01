@@ -23,8 +23,8 @@ function AddFilmForm(props) {
             // Se inserimento dati corretto
 
             const newFilm = { nome: name, favorite: favorite, date: date.isValid() ? date : undefined, score: score }
-            setFilms(oldFilms => [...oldFilms, newFilm]);
-            navigate('/')//Ritorno alla HomePage
+            setFilms(newFilm);
+            setTimeout(() => navigate('/'),1000);//Ritorno alla HomePage
 
         }
         //Gestione degli errori

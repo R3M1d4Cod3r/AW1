@@ -7,6 +7,7 @@ const getFilms = async (filter) => {
     let result = await fetch(new URL('/filter/' + filter.toLowerCase(), APIURL))
         .then((response) => {
             if (response.ok) {
+
                 return response.json()
             } else {
                 throw response.statusText;
@@ -34,6 +35,7 @@ const getFilmsById = async (id) => {
 }
 
 const createFilm = async (film) => {
+    console.log(film);
     return fetch(new URL("/add", APIURL),{
         method: 'POST',
         headers:{
