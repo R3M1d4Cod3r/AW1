@@ -12,7 +12,7 @@ app.use(express.json());//importante altrimenti le richieste post in json non fu
 
 const CHECKALL = () => {
     return [
-        check('rating').isIn([1, 2, 3, 4, 5]),
+        check('rating').isIn([0,1, 2, 3, 4, 5]),
         check('favorite').isBoolean(),
         check('title').isAlphanumeric(),
         check('watchdate').custom(date => {
@@ -86,10 +86,10 @@ app.put('/edit', CHECKALL(), (req, res) => {
     }
     const film = {//title,favorite,watchdate,rating
         id: req.body.id,
-        title: req.body.nome,
+        title: req.body.title,
         favorite: req.body.favorite,
-        watchdate: req.body.date,
-        rating: req.body.score,
+        watchdate: req.body.watchdate,
+        rating: req.body.rating,
     };
     dao.Update(film)
         .then(film => res.json(film))

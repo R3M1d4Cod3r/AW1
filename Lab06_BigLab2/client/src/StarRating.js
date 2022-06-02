@@ -30,8 +30,8 @@ function StarRating(props) {
         //Controllo se viene passato una lista film allora star rating serve per modificare la lista dei film altrimenti serve per la creazione di un nuovo film
         if (Film) {
             setFilm(Film.map((e) => {
-                if (e.nome === props.nome) {
-                    return { id:e.id,nome: e.nome, favorite: e.favorite, score: value, date: e.date };
+                if (e.title === props.nome) {
+                    return { id:e.id,title: e.title, favorite: e.favorite, rating: value, watchdate: e.watchdate };
                 }
                 return e;
             }));

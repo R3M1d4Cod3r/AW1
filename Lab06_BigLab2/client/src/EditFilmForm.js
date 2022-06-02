@@ -3,6 +3,7 @@ import { Button, Form, Alert, Row, Col, Container } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import StarRating from './StarRating.js';
 import { useNavigate, useParams } from 'react-router-dom';
+import API from './API.js';
 
 //Componente che si occupa dell'edit di un film alla lista
 function EditFilmForm(props) {
@@ -12,14 +13,14 @@ function EditFilmForm(props) {
     const films = props.films;
     const setFilms = props.setFilms;
 
-    const FilmToEdit = films.find((f) => f.nome === FilmName);
+    const FilmToEdit = films.find((f) => f.title === FilmName);
 
 
 
-    const [name, setName] = useState(FilmToEdit.nome);
+    const [name, setName] = useState(FilmToEdit.title);
     const [favorite, setFavorite] = useState(FilmToEdit.favorite);
-    const [date, setDate] = useState(FilmToEdit.date ? FilmToEdit.date : dayjs());
-    const [score, setScore] = useState(FilmToEdit.score);
+    const [date, setDate] = useState(FilmToEdit.watchdate ? FilmToEdit.watchdate : dayjs());
+    const [score, setScore] = useState(FilmToEdit.rating);
     const [errorMsg, setErrorMsg] = useState('');
 
 
@@ -28,13 +29,14 @@ function EditFilmForm(props) {
         event.preventDefault();
         if (score >= 0 && score <= 5 && name !== '' && !date.isAfter(dayjs())) { // Controllo se la sottomissione del form è corretta
 
-            const newFilm = { nome: name, favorite: favorite, date: date.isValid() ? date : undefined, score: score };
-            setFilms(() => films.map(f => {
-                if (f.nome === FilmToEdit.nome) {
+            const newFilm = {id:FilmToEdit.id, title: name, favorite: favorite, watchdate: date.isValid() ? date : null, rating : score };
+            /*setFilms(() => films.map(f => {
+                if (f.title === FilmToEdit.title) {
                     return newFilm
                 }
                 return f;
-            }));
+            }));*/
+            API.updateFilm(newFilm).then( () => console.log("okay")).catch(e => console.log(e));
             navigate('/')
         }
         //Gestione degli errori
@@ -54,7 +56,7 @@ function EditFilmForm(props) {
 
         <Form>
             <Form.Group>
-                <Form.Label><h1>Name: {FilmToEdit.nome} </h1></Form.Label>
+                <Form.Label><h1>Name: {FilmToEdit.title} </h1></Form.Label>
                 <Form.Control value={name} onChange={ev => setName(ev.target.value)}></Form.Control>
             </Form.Group>
             <Form.Label>Favorite:</Form.Label>

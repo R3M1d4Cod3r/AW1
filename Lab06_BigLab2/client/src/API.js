@@ -16,7 +16,7 @@ const getFilms = async (filter) => {
         .catch((error) => {
             throw error;
         });
-    return result.map(f => ({id:f.id,nome:f.title,favorite:f.favorite,date:dayjs(f.watchdate),score:f.rating}));
+    return result.map(f => ({id:f.id,title:f.title,favorite:f.favorite,watchdate:dayjs(f.watchdate),rating:f.rating}));
 }
 
 const getFilmsById = async (id) => {
@@ -31,7 +31,7 @@ const getFilmsById = async (id) => {
         .catch((error) => {
             throw error;
         });
-        return result.map(f => ({id:f.id,nome:f.title,favorite:f.favorite,date:dayjs(f.watchdate),score:f.rating}));
+        return result.map(f => ({id:f.id,title:f.title,favorite:f.favorite,watchdate:dayjs(f.watchdate),rating:f.rating}));
 }
 
 const createFilm = async (film) => {
@@ -41,7 +41,7 @@ const createFilm = async (film) => {
         headers:{
             'Content-Type':'application/json',
         },
-        body: JSON.stringify(film),
+        body: JSON.stringify({title:film.title,favorite:film.favorite,watchdate:film.watchdate.format("YYYY-MM-DD"),rating:film.rating}),
     })
         .then((response) => {
             if (response.ok) {
@@ -75,13 +75,14 @@ const updateFilm = async (film) => {
         });
 }
 
-const markFilm = async (id_favorite) => {
+const markFilm = async (id_favorite,fav) => {
+    let ob = {id: id_favorite, favorite : fav}
     return fetch(new URL("/mark", APIURL),{
-        method: 'POST',
+        method: 'PUT',
         headers:{
             'Content-Type':'application/json',
         },
-        body: JSON.stringify(id_favorite),
+        body: JSON.stringify(ob),
     })
         .then((response) => {
             if (response.ok) {
@@ -96,13 +97,14 @@ const markFilm = async (id_favorite) => {
 }
 
 
-const deleteFilm = async (id) => {
-    return fetch(new URL("/mark", APIURL),{
+const deleteFilm = async (ID) => {
+    let Id = {id: ID}
+    return fetch(new URL("/delete", APIURL),{
         method: 'DELETE',
         headers:{
             'Content-Type':'application/json',
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify(Id),
     })
         .then((response) => {
             if (response.ok) {

@@ -2,7 +2,7 @@
 
 const dayjs = require('dayjs');
 const sqlite = require("sqlite3");
-const db = new sqlite.Database("film.db", (err) => { if (err) throw err; });
+const db = new sqlite.Database("films.db", (err) => { if (err) throw err; });
 
 
 exports.getAll = () => {
@@ -21,7 +21,7 @@ exports.getAll = () => {
 exports.Allfavorite = () => {
     return new Promise((resolve, reject) => {
         let result = [];
-        db.all("SELECT * FROM films WHERE films.favorite != FALSE", (err, rows) => {
+        db.all("SELECT * FROM films WHERE films.favorite = TRUE", (err, rows) => {
             if (err)
                 reject(err);
 
@@ -97,13 +97,14 @@ exports.Store = async (film) => {
             });
         });
     });
-
+    console.log(film+"  id: "+ total+1)
     return new Promise((resolve, reject) => {
-        let sql = "INSERT INTO films (id,title,favorite,watchdate,rating) VALUES(?,?,?,?,?)"
-        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.watchdate != null) ? film.watchdate : undefined, film.rating], err => { if (err) reject(err); });
+        let sql = "INSERT INTO films (id,title,favorite,watchdate,rating,user) VALUES(?,?,?,?,?,?)"
+        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.watchdate != null) ? film.watchdate : undefined, film.rating,1], err => { if (err) reject(err); });
         film.id = total + 1;
         resolve(film);
     })
+
 }
 
 exports.Update = async (film) => {
