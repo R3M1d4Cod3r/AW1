@@ -41,7 +41,7 @@ const createFilm = async (film) => {
         headers:{
             'Content-Type':'application/json',
         },
-        body: JSON.stringify({title:film.title,favorite:film.favorite,watchdate:film.watchdate.format("YYYY-MM-DD"),rating:film.rating}),
+        body: JSON.stringify({title:film.title,favorite:film.favorite,watchdate:film.watchdate?.format("YYYY-MM-DD"),rating:film.rating}),
     })
         .then((response) => {
             if (response.ok) {

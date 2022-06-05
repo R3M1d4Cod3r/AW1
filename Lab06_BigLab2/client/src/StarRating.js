@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BsFillStarFill } from 'react-icons/bs';
+import API from "./API";
 
 function StarRating(props) {
 
@@ -31,7 +32,9 @@ function StarRating(props) {
         if (Film) {
             setFilm(Film.map((e) => {
                 if (e.title === props.nome) {
-                    return { id:e.id,title: e.title, favorite: e.favorite, rating: value, watchdate: e.watchdate };
+                    let filmnuovo= { id:e.id,title: e.title, favorite: e.favorite, rating: value, watchdate: e.watchdate };
+                    API.updateFilm(filmnuovo);
+                    return filmnuovo;
                 }
                 return e;
             }));

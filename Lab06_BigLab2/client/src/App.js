@@ -15,12 +15,14 @@ import API from './API';
 
 function App() {
   const [Films, setFilms] = useState([]);//Stato con tutti i film
+
   function addfilm(newFilm){
     console.log(newFilm);
     API.createFilm(newFilm).then( () => console.log("okay")).catch(e => console.log(e));
     //setFilms( Films=> [...Films, newFilm]);
     console.log(Films);
   }
+
   return (
 
     <Router>
@@ -78,7 +80,7 @@ function LandingPage(props) {
         </Col>
         <Col md={9}>
           <br />
-          <MyMain name={SelButton} films={props.films} setFilms={props.setFilms} filter={filtername} />
+          <MyMain name={SelButton} films={props.films} setFilms={props.setFilms} filter={filtername} setDirty={setDirty}/>
         </Col>
       </Row>
 

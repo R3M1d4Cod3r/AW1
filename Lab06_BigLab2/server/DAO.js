@@ -100,7 +100,7 @@ exports.Store = async (film) => {
     console.log(film+"  id: "+ total+1)
     return new Promise((resolve, reject) => {
         let sql = "INSERT INTO films (id,title,favorite,watchdate,rating,user) VALUES(?,?,?,?,?,?)"
-        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.watchdate != null) ? film.watchdate : undefined, film.rating,1], err => { if (err) reject(err); });
+        db.run(sql, [total + 1, film.title, (film.favorite) ? 1 : 0, (film.watchdate != null) ? film.watchdate : null , film.rating,1], err => { if (err) reject(err); });
         film.id = total + 1;
         resolve(film);
     })

@@ -22,7 +22,7 @@ function AddFilmForm(props) {
         if (score >= 0 && score <= 5 && name !== '' && !date.isAfter(dayjs())) {
             // Se inserimento dati corretto
 
-            const newFilm = { title: name, favorite: favorite, watchdate: date.isValid() ? date : undefined, rating: score }
+            const newFilm = { title: name, favorite: favorite, watchdate: date.isValid() ? date : null, rating: score }
             setFilms(newFilm);
             setTimeout(() => navigate('/'),1000);//Ritorno alla HomePage
 

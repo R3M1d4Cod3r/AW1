@@ -19,11 +19,11 @@ function MyMain(props) {//Componente per la gestione della tabella di film
     function changeFavorite(film) {//funzione per modificare preferenza di un film
         setFilms(films.map((e) => {
             if (e.title === film.title) {
-                return { title: e.title, favorite: !e.favorite, rating: e.rating, watchdate: e.watchdate };
+                return { title: e.title, favorite: !e.favorite, rating: e.rating, watchdate: e.watchdate, status : "table-warning" };
             }
             return e;
         }));
-        API.markFilm(film.id,!film.favorite).then(()=>console.log("ok")).catch( e => console.log(e));
+        setTimeout( () => {API.markFilm(film.id,!film.favorite).then(()=>console.log("ok")).catch( e => console.log(e));props.setDirty(true)}, 1000)
     }
 
    
@@ -34,7 +34,7 @@ function MyMain(props) {//Componente per la gestione della tabella di film
                 <tbody id="film-table">
                     {
                         films.map((el) => (
-                            <tr key={el.id} >
+                            <tr key={el.id} className={el.status}>
                                 <td >
                                     <BsPencilSquare id="click" onClick={() => navigate('/edit/' + el.title)}></BsPencilSquare>
 
@@ -53,7 +53,7 @@ function MyMain(props) {//Componente per la gestione della tabella di film
                                 </td>
 
                                 <td>
-                                    {el.watchdate ? el.watchdate.format("MMM DD, YYYY") : ""}
+                                    {el.watchdate?.isValid() ? el.watchdate.format("MMM DD, YYYY") : ""}
                                 </td>
                                 <td>
                                     <StarRating star={el.rating} nome={el.title} Films={films} setFilms={setFilms} /> {/*Stelle laterali per settare voto=0 premere due volte la stella 1*/}
