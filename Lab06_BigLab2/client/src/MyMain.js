@@ -23,7 +23,7 @@ function MyMain(props) {//Componente per la gestione della tabella di film
             }
             return e;
         }));
-        setTimeout( () => {API.markFilm(film.id,!film.favorite).then(()=>console.log("ok")).catch( e => console.log(e));props.setDirty(true)}, 1000)
+        setTimeout( () => {API.markFilm(film.id,!film.favorite).then(()=>console.log("ok")).catch( e => console.log(e));props.setDirty(true)}, 10)
     }
 
    

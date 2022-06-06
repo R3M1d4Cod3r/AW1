@@ -38,6 +38,7 @@ const createFilm = async (film) => {
     console.log(film);
     return fetch(new URL("/add", APIURL),{
         method: 'POST',
+        credentials: 'include',
         headers:{
             'Content-Type':'application/json',
         },
@@ -58,6 +59,7 @@ const createFilm = async (film) => {
 const updateFilm = async (film) => {
     return fetch(new URL("/edit", APIURL),{
         method: 'PUT',
+        credentials: 'include',
         headers:{
             'Content-Type':'application/json',
         },
@@ -79,6 +81,7 @@ const markFilm = async (id_favorite,fav) => {
     let ob = {id: id_favorite, favorite : fav}
     return fetch(new URL("/mark", APIURL),{
         method: 'PUT',
+        credentials: 'include',
         headers:{
             'Content-Type':'application/json',
         },
@@ -101,6 +104,7 @@ const deleteFilm = async (ID) => {
     let Id = {id: ID}
     return fetch(new URL("/delete", APIURL),{
         method: 'DELETE',
+        credentials: 'include',
         headers:{
             'Content-Type':'application/json',
         },
@@ -117,5 +121,24 @@ const deleteFilm = async (ID) => {
             throw error;
         });
 }
-const API ={getFilms ,getFilmsById ,createFilm,updateFilm,markFilm,deleteFilm};
+
+const logIn = async (credentials) => {
+    let response = await fetch( new URL('/sessions', APIURL),{
+        method: 'POST',
+        credentials: 'include',
+        headers : {
+            'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(credentials),
+    });
+    console.log(credentials);
+    if ( response.ok){
+        const user = await response.json();
+        return user;
+    } else {
+        const err = await response.json();
+        throw err;
+    }
+}
+const API ={getFilms ,getFilmsById ,createFilm,updateFilm,markFilm,deleteFilm, logIn};
 export default API;

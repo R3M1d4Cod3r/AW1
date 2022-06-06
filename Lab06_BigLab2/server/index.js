@@ -6,9 +6,55 @@ const cors = require('cors');
 const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
 const app = express();
+const userDao = require('./user-dao');
 
-app.use(cors());
-app.use(express.json());//importante altrimenti le richieste post in json non funzionanp
+const passport = require('passport');//NEESSARI PER PASSPORT
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session'); // enable sessions
+
+app.use(cors({
+    origin : 'http://localhost:3000',  //NECESSARIO PER USARE PASSPORT CON CORSS
+    credentials: true ,
+}));
+app.use(express.json());//importante altrimenti le richieste post in json non funzionano
+
+
+passport.use(new LocalStrategy(
+    function(username,password,done){
+        userDao.getUser(username,password)
+        .then(user => {
+            if(!user)
+                return done(null,false,{ message : 'incorrec username and/or passrword'})
+        })
+    }
+))
+
+passport.serializeUser((user,done)=>{
+    done(null,user.id);
+});
+
+passport.deserializeUser((id,done)=> {
+    userDao.getUserById(id)
+    .then(user => {
+        done(null,user);
+    })
+    .catch( err => {
+        done(err,null)
+    });
+});
+
+app.use(session({
+    secret : 'frase segreta',
+    resave : false,
+    saveUninitialized : false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+const isloggedIn = (req,res,next) =>{
+    if(req.isAuthenticated())
+        return next();
+    return res.status(401).json({error : 'not authenticated'});
+};
 
 const CHECKALL = () => {
     return [
@@ -28,7 +74,7 @@ const CHECKALL = () => {
 
         })];
 }
-app.get('/filter/:filter_name', (req, res) => {
+app.get('/filter/:filter_name', isloggedIn, (req, res) => {
     let f;
     switch (req.params.filter_name) {
         case 'all':
@@ -53,13 +99,13 @@ app.get('/filter/:filter_name', (req, res) => {
     f().then(films => res.json(films)).catch(err => console.log(err));
 });
 
-app.get('/film/:id', (req, res) => {
+app.get('/film/:id', isloggedIn,(req, res) => {
     dao.getFilmById(req.params.id)
         .then(film => res.json(film))
         .catch(err => console.log(err));
 });
 
-app.post('/add', CHECKALL(), (req, res) => {
+app.post('/add', isloggedIn, CHECKALL(), (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
     if (!errors.isEmpty()) {
@@ -78,7 +124,7 @@ app.post('/add', CHECKALL(), (req, res) => {
         .catch(err => console.log(err));
 });
 
-app.put('/edit', CHECKALL(), (req, res) => {
+app.put('/edit',isloggedIn, CHECKALL(), (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         console.log(req.body);
@@ -96,7 +142,7 @@ app.put('/edit', CHECKALL(), (req, res) => {
         .catch(err => console.log(err));
 });
 
-app.put('/mark', [
+app.put('/mark',isloggedIn, [
     check('id').isDecimal(),
     check('favorite').isBoolean(),
 ], (req, res) => {
@@ -113,7 +159,7 @@ app.put('/mark', [
         .catch(err => console.log(err));
 });
 
-app.delete('/delete', [check('id').isDecimal(),], (req, res) => {
+app.delete('/delete', isloggedIn,[check('id').isDecimal(),], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -122,6 +168,19 @@ app.delete('/delete', [check('id').isDecimal(),], (req, res) => {
         .then(msg => res.json(msg))
         .catch(err => console.log(err));
 })
+
+app.post('/sessions', (req,res,next) => {
+    passport.authenticate('local',(err,user,info)=>{
+        if (err) return next(err);
+        if(!user) return res.status(401).json(info);
+
+        req.login(user, err => {
+            if (err) return next(err);  
+            return res.json(req.user);
+        });
+        
+    })
+});
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
