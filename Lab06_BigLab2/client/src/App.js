@@ -27,7 +27,7 @@ function App() {
   return (
 
     <Router>
-      <Routes>asdasdasd
+      <Routes>
         <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<LandingPage films={Films} setFilms={setFilms} LoggedIn={LoggedIn}/>} />
@@ -63,7 +63,7 @@ function LandingPage(props) {
 
   useEffect(() => {
 
-    if (dirty && filtername) {
+    if (dirty && filtername && props.LoggedIn) {
       setTimeout(() => { API.getFilms(filtername).then(films => { props.setFilms(films); }).catch(e => console.log(e)); setDirty(false); }, 1000);
     }
   }, [dirty, SelButton,props.LoggedIn]);
@@ -92,7 +92,7 @@ function LandingPage(props) {
 
 function Login(props) {
 
-  const [email, setEmail] = useState('');
+  const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
@@ -100,11 +100,11 @@ function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (password != '' && email != '') {
-      let credentials = { user : email , password : password};
+    if (password != '' && username != '') {
+      let credentials = { username ,  password};
       API.logIn(credentials)
-        .then(() => setLoggedIn(true))
-        .catch(err => console.log(err));
+        .then(() => {setLoggedIn(true); console.log(credentials);})
+        .catch(err => console.log(err ));
       navigate('/');
     }
     setErrorMsg('Errore Password o Email');
@@ -119,7 +119,7 @@ function Login(props) {
           {errorMsg ? <Alert variant='danger' onClose={() => setErrorMsg('')} dismissible>{errorMsg}</Alert> : false}
           <Form>
             <Form.Label> Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" value={email} onChange={ev => setEmail(ev.target.value)} />
+            <Form.Control type="email" placeholder="Enter email" value={username} onChange={ev => setEmail(ev.target.value)} />
             <Form.Label>Password</Form.Label>
             <Form.Control type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)} />
             <Button variant="primary" type="submit" onClick={handleSubmit}>

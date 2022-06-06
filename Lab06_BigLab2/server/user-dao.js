@@ -19,7 +19,10 @@ exports.getUser = (email, password) => {
 
                 crypto.scrypt(password, salt, 32, (err, hashedPassword) => {
                     if (err) { reject(err); }
-                    const password_hex = Buffer.from(row.password, 'hex');
+                    //console.log(row.hash);
+                    const password_hex = Buffer.from(row.hash, 'hex');
+                    //console.log(password_hex);
+                    //console.log(hashedPassword);
                     if (!crypto.timingSafeEqual(password_hex, hashedPassword))
                         resolve(false);
                     else resolve(user);
@@ -30,7 +33,7 @@ exports.getUser = (email, password) => {
     });
 }
 
-exports.getUserById = (Id) => {
+exports.getUserById = (id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM users WHERE id = ?'
         db.get(sql, [id], (err, row) => {

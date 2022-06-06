@@ -4,7 +4,7 @@ const APIURL = new URL('http://localhost:3001');//URL del server Express
 
 
 const getFilms = async (filter) => {
-    let result = await fetch(new URL('/filter/' + filter.toLowerCase(), APIURL))
+    let result = await fetch(new URL('/filter/' + filter.toLowerCase(), APIURL),{credentials:'include'})
         .then((response) => {
             if (response.ok) {
 

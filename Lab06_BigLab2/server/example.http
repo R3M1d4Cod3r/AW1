@@ -45,3 +45,13 @@ content-type: application/json
 {
     "id": 6
 }
+###
+POST http://localhost:3001/sessions HTTP/1.1
+content-type: application/json
+
+{
+  
+       "username":"test@polito.it",
+        "password":"password"
+   
+}

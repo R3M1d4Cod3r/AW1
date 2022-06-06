@@ -24,7 +24,9 @@ passport.use(new LocalStrategy(
         userDao.getUser(username,password)
         .then(user => {
             if(!user)
-                return done(null,false,{ message : 'incorrec username and/or passrword'})
+                return done(null,false,{ message : 'incorrec username and/or passrword'});
+
+                return done(null, user);
         })
     }
 ))
@@ -44,15 +46,17 @@ passport.deserializeUser((id,done)=> {
 });
 
 app.use(session({
-    secret : 'frase segreta',
+    secret : 'a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie',
     resave : false,
     saveUninitialized : false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 const isloggedIn = (req,res,next) =>{
     if(req.isAuthenticated())
         return next();
+        
     return res.status(401).json({error : 'not authenticated'});
 };
 
@@ -169,18 +173,38 @@ app.delete('/delete', isloggedIn,[check('id').isDecimal(),], (req, res) => {
         .catch(err => console.log(err));
 })
 
-app.post('/sessions', (req,res,next) => {
-    passport.authenticate('local',(err,user,info)=>{
-        if (err) return next(err);
-        if(!user) return res.status(401).json(info);
-
-        req.login(user, err => {
-            if (err) return next(err);  
-            return res.json(req.user);
+app.post('/sessions', function(req, res, next) {
+    passport.authenticate('local', (err, user, info) => {
+      if (err)
+        return next(err);
+        if (!user) {
+          // display wrong login messages
+          return res.status(401).json(info);
+        }
+        // success, perform the login
+        req.login(user, (err) => {
+          if (err)
+            return next(err);
+          
+          // req.user contains the authenticated user, we send all the user info back
+          // this is coming from userDao.getUser()
+          return res.json(req.user);
         });
-        
-    })
-});
+    })(req, res, next);
+  });
 
+// DELETE /sessions/current 
+// logout
+app.delete('/sessions/current', (req, res) => {
+    req.logout( ()=> { res.end(); } );
+  });
+  
+  // GET /sessions/current
+  // check whether the user is logged in or not
+  app.get('/api/sessions/current', (req, res) => {  if(req.isAuthenticated()) {
+      res.status(200).json(req.user);}
+    else
+      res.status(401).json({error: 'Unauthenticated user!'});;
+  });
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
