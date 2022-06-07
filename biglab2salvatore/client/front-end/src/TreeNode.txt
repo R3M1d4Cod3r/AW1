@@ -1,0 +1,7 @@
+App <---- state: button List
+    MyNav
+    Container
+        MyAside
+        MyMain <----- state : films list , ShowForm
+            StarRating <--- state : stars list 
+            AddFilmForm <--- state : controlled form
