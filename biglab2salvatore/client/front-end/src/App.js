@@ -1,8 +1,8 @@
 import './App.css';
 import MyNav from "./MyNav.js";
 import MyAside from './MyAside.js';
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet, useParams ,useNavigate ,Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Outlet, useParams, useNavigate, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import MyMain from './MyMain.js';
@@ -10,97 +10,108 @@ import AddFilmForm from './AddFilmForm';
 import EditFilmForm from './EditFilmForm';
 import { useEffect } from 'react';
 import API from './API.js'
-import {LoginForm,LogoutButton} from './LoginComponents'
+import { LoginForm, LogoutButton } from './LoginComponents'
 
 function App() {
   return (
+    <React.StrictMode>
     <Router>
       <App2 />
     </Router>
+    </React.StrictMode>
   );
 }
 function App2() {
   const [Films, setFilms] = useState([]);//Stato con tutti i film
-  const [dirty,setDirty]=useState(true);//è un flag che se io faccio cambiare mi ricarica la lista dal server
-  const [loggedIn,setLoggedIn]=useState(false);
-  const [user,setUser]=useState({});
+  const [dirty, setDirty] = useState(true);//è un flag che se io faccio cambiare mi ricarica la lista dal server
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
   let navigate = useNavigate();
 
-  useEffect(()=> {
-    const checkAuth = async() => {
+  useEffect(() => {
+    const checkAuth = async () => {
       try {
         // here you have the user info, if already logged in
         // TODO: store them somewhere and use them, if needed
+
         const user = await API.getUserInfo();
         setLoggedIn(true);
         setUser(user);
-      } catch(err) {
+   
+      
+      } catch (err) {
         handleError(err);
       }
     };
     checkAuth();
   }, []);
- /* useEffect(() => {
-    if (loggedIn)
-      API.getAllFilms()
-        .then( (films) => { setFilms(films); setDirty(true); } )
-        .catch( err => handleError(err))
-  }, [loggedIn])*/
+  /* useEffect(() => {
+     if (loggedIn)
+       API.getAllFilms()
+         .then( (films) => { setFilms(films); setDirty(true); } )
+         .catch( err => handleError(err))
+   }, [loggedIn])*/
 
-  useEffect(()=>{
+  useEffect(() => {
     //fetch /api/films
     //set films del risutlato
-    if(dirty){
-      console.log(loggedIn);
-    API.getAllFilms().
-    then((films)=>{
-      setFilms(films);
-      setDirty(false);
-    }).
-    catch(err=>console.log(err));}
-    
-  },[dirty,Films.length]);
-  function handleError(err){
+    console.log("loggedIn: "+loggedIn+" Dirty: "+ dirty);
+    if (dirty && loggedIn ) {
+      
+      API.getAllFilms().
+        then((films) => {
+          setFilms(films);
+          setDirty(false);
+        }).
+        catch(err => console.log(err));
+    }
+
+  }, [dirty, Films.length,loggedIn]);
+
+  function handleError(err) {
     console.log(err);
   }
-  function updateFilm(film){
-    setFilms(Films=>Films.map(
-      f=>(f.id==film.id)?Object.assign({},film):f
+
+  function updateFilm(film) {
+    setFilms(Films => Films.map(
+      f => (f.id == film.id) ? Object.assign({}, film) : f
     ));
-      
-      API.updateFilm(film)
-      .then(()=>setDirty(true))
-      .catch(err=>handleError(err));
+
+    API.updateFilm(film)
+      .then(() => setDirty(true))
+      .catch(err => handleError(err));
   }
-  function addFilm(film){
+
+  function addFilm(film) {
     console.log(film.title);
-    setFilms(oldFilms=>[...oldFilms,film]);
+    setFilms(oldFilms => [...oldFilms, film]);
     API.addFilm(film)
-    .then(()=>setDirty(true))
-    .catch(err=>handleError(err));
+      .then(() => setDirty(true))
+      .catch(err => handleError(err));
   }
+   
   function deleteFilm(idFilm) {
 
-    setFilms( Films => Films.filter(e=>e.id!=idFilm));
+    setFilms(Films => Films.filter(e => e.id != idFilm));
     console.log(dirty);
     API.deleteFilm(idFilm)
-      .then( ()=> {
+      .then(() => {
         setDirty(true);
       })
-      .catch( err => handleError(err));
+      .catch(err => handleError(err));
   }
-  const doLogin=(credentials)=>{
+  const doLogin = (credentials) => {
     API.logIn(credentials)
-    .then(user=>{
-      setLoggedIn(true);
+      .then(user => {
+        setLoggedIn(true);
         setUser(user);
         //setMessage('');
         navigate('/');;
 
-    })
-    .catch();
+      })
+      .catch();
   }
-  const  doLogOut=async ()=>{
+  const doLogOut = async () => {
     await API.logOut();
     setLoggedIn(false);
     setUser({});
@@ -110,15 +121,15 @@ function App2() {
   }
   return (
 
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={loggedIn ?<LandingPage films={Films} setFilms={setFilms} updateFilm={updateFilm} deleteFilm={deleteFilm} loggedIn={loggedIn} doLogOut={doLogOut} user={user} />:<Navigate to ='/login'/>} />
-          <Route path="/:Filter" element={<LandingPage films={Films} setFilms={setFilms} updateFilm={updateFilm} deleteFilm={deleteFilm} loggedIn={loggedIn} doLogOut={doLogOut} user={user}/>} />
-          <Route path='/add' element={<AddFilmForm addFilm={addFilm} />} />
-          <Route path='/edit/:FilmId' element={<EditFilmForm films={Films} setFilms={updateFilm} />} />
-          <Route path='/login' element={<LoginForm login={doLogin}/>}/>
-        </Route>
-      </Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="/" element={loggedIn ? <LandingPage films={Films} setFilms={setFilms} updateFilm={updateFilm} deleteFilm={deleteFilm} loggedIn={loggedIn} doLogOut={doLogOut} user={user} dirty={dirty}/> : <Navigate to='/login' />} />
+        <Route path="/:Filter" element={<LandingPage films={Films} setFilms={setFilms} updateFilm={updateFilm} deleteFilm={deleteFilm} loggedIn={loggedIn} doLogOut={doLogOut} user={user} />} />
+        <Route path='/add' element={<AddFilmForm addFilm={addFilm} />} />
+        <Route path='/edit/:FilmId' element={<EditFilmForm films={Films} setFilms={updateFilm} />} />
+        <Route path='/login' element={<LoginForm login={doLogin} />} />
+      </Route>
+    </Routes>
 
   );
 }
@@ -139,20 +150,22 @@ function LandingPage(props) {
   let button_list = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"];
   const [SelButton, setSelButton] = useState("All"); //Stato dei bottoni laterali
   const { Filter } = useParams(); //Parametro per impostare i filtri da url
-  const setFilms=props.setFilms;
-  const Films=props.films;
-  const Filtro=SelButton.replace(" ","");
+  const setFilms = props.setFilms;
+  const Films = props.films;
+  const Filtro = SelButton.replace(" ", "");
   console.log(Filtro);
- useEffect(()=>{
+  useEffect(() => {
     //fetch /api/films
     //set films del risutlato
-    API.getFilms(SelButton.replace(" ","")).then((Films)=>setFilms(Films)).catch(err=>console.log(err));
-  },[SelButton])
-  let filtername = Filter ; 
+    if(props.dirty && props.loggedIn){
+      API.getFilms(SelButton.replace(" ", "")).then((Films) => setFilms(Films)).catch(err => console.log(err));
+    }
+  }, [SelButton,props.dirty,props.loggedIn])
+  let filtername = Filter;
   return (
     <Row>
       <Col className="bg-light" md={3} id="aside">
-        {props.loggedIn? <LogoutButton logout={props.doLogOut} user={props.user}/>:false}
+        {props.loggedIn ? <LogoutButton logout={props.doLogOut} user={props.user} /> : false}
         <br />
         <MyAside bottoni={button_list} SelButton={SelButton} setSelButton={setSelButton} filter={Filter} />
       </Col>

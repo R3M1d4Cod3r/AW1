@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function MyMain(props) {//Componente per la gestione della tabella di film
     let name = props.filter;
     const films = props.films;
-    
+
     const updateFilm = props.updateFilm;
     const navigate = useNavigate();
 
@@ -17,8 +17,8 @@ function MyMain(props) {//Componente per la gestione della tabella di film
     }*/
 
     function changeFavorite(id) {//funzione per modificare preferenza di un film
-      let  e=films.find(fi=>fi.id==id);
-        updateFilm( { id:e.id, title: e.title, favorite:e.favorite==1?0:1, rating: e.rating, watchdate: e.watchdate,user:e.user });
+        let e = films.find(fi => fi.id == id);
+        updateFilm({ id: e.id, title: e.title, favorite: e.favorite == 1 ? 0 : 1, rating: e.rating, watchdate: e.watchdate, user: e.user });
     }
 
     let result;
@@ -54,7 +54,7 @@ function MyMain(props) {//Componente per la gestione della tabella di film
             <table className='table'>
                 <tbody id="film-table">
                     {
-                        result.map((el) => (  
+                        result.map((el) => (
                             <tr key={el.id} >
                                 <td >
                                     <BsPencilSquare id="click" onClick={() => navigate(`/edit/${el.id}`)}></BsPencilSquare>
@@ -62,7 +62,7 @@ function MyMain(props) {//Componente per la gestione della tabella di film
                                     <BsTrash
                                         className="trash"
                                         onClick={() => props.deleteFilm(el.id)} />
-                                    <div id={el.favorite==1 ? "rosso" : "nero"} >
+                                    <div id={el.favorite == 1 ? "rosso" : "nero"} >
                                         {el.title}
                                     </div>
                                 </td>

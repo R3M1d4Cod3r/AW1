@@ -100,7 +100,7 @@ app.get('/api/films/BestRated',isLoggedIn,(req,res)=>{
     dao.listFilmsBestRated(req.user.id).then(films=>res.json(films)).catch(()=>res.status(500).end())});
 
 app.get('/api/films/SeenLastMonth',isLoggedIn,(req,res)=>{
-        dao.listFilmsSeenLastMonth(req.user.id).then(films=>res.json(films)).catch(()=>res.status(500).end())});
+        dao.listFilmsSeenLastMonth(req.user.id).then(films=>res.json(films)).catch((err)=>{res.status(500).end();console.log(err)})});
 
 app.get('/api/films/Unseen',isLoggedIn,(req,res)=>{
     dao.listFilmsUnseen(req.user.id).then(films=>res.json(films)).catch(()=>res.status(500).end())});
@@ -110,6 +110,7 @@ app.get('/api/films/Unseen',isLoggedIn,(req,res)=>{
             
     app.post('/api/films', isLoggedIn,[
       //check('title').isLength({min:1}).trim,
+      check('title').isAlphanumeric(),
       check('favorite').isInt({min:0,max:1}),
       check('watchdate').isDate({format: 'YYYY-MM-DD', strictMode: true}),
       check('rating').isInt({min:0,max:5})

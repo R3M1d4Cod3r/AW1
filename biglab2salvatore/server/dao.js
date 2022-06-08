@@ -2,6 +2,7 @@
 /* Data Access Object (DAO) module for accessing courses and exams */
 
 const sqlite = require('sqlite3');
+const dayjs= require('dayjs');
 
 // open the database
 const db = new sqlite.Database('films.db', (err) => {
@@ -54,7 +55,8 @@ exports.listFilmsBestRated = (userID) => {
 
 exports.listFilmsSeenLastMonth = (userID) => {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM films WHERE watchdate BETWEEN 2022-02-12 AND 2022-05-12 AND user==?';
+    const sql = `SELECT * FROM films WHERE watchdate BETWEEN '${dayjs().subtract(1,'month').format("YYYY-MM-DD")}' AND '${dayjs().format("YYYY-MM-DD")}' AND user==?`;
+    console.log(sql);
     db.all(sql, [userID], (err, rows) => {
       if (err) {
         reject(err);

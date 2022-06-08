@@ -1,0 +1,58 @@
+GET http://localhost:3001/api/films/All
+###
+GET http://localhost:3001/filter/favorite
+###
+GET http://localhost:3001/filter/best rated
+###
+GET http://localhost:3001/api/films/SeenLastMonth
+###
+GET http://localhost:3001/filter/unseen
+###
+GET http://localhost:3001/film/1
+###
+POST http://localhost:3001/api/films HTTP/1.1
+content-type: application/json
+
+{
+    "title": "abc",
+    "favorite": 1,
+    "watchdate" : "2022-06-01",
+    "rating" : "3"
+}
+###
+PUT  http://localhost:3001/edit HTTP/1.1
+content-type: application/json
+
+{
+    "id": 8,
+    "title": "sampleeeeeeeeeee",
+    "favorite": false,
+    "watchdate" : null,
+    "rating" : 5
+}
+###
+PUT http://localhost:3001/mark HTTP/1.1
+content-type: application/json
+
+{
+    "id": 8,
+    "favorite": true
+}
+###
+DELETE http://localhost:3001/delete HTTP/1.1
+content-type: application/json
+
+{
+    "id": 6
+}
+###
+POST http://localhost:3001/api/sessions HTTP/1.1
+content-type: application/json
+
+{
+  
+       "username":"test@polito.it",
+        "password":"password"
+   
+}
+
